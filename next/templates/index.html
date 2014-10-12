@@ -11,25 +11,32 @@
 </head>
 <body>
     <div class="row-fluid padding-top-bottom">
-            <div class="span10 offset1">
+            <div class="span7 offset1">
         		{% if item_list %}
-    				<ul>
-    					{% for key, value in item_list.iteritems %}
-                            <h3>{{key}}</h3>
+					{% for key, value in item_list.iteritems %}
+                        <h3>{{key}}</h3>
+                        <ul class="sortable">
                             {% for item in value %}
-                                <div class="todo-item">
-                                    <span class="{{item.title}}">{{item.title}}</span>
-                                    <span class="fl-r padding_left_10"><img src="{% static 'img/check.png' %}"/></span>
-                                    <span class="fl-r padding_left_10"><img src="{% static 'img/edit.png' %}"/></span>
-                                </div><br/>
+                                <li>
+                                    <div class="todo-item">
+                                        {% if not item.completed %}
+                                            <span class="{{item.title}}" id="{{item.id}}">{{item.title}}</span>
+                                            <div class="fl-r margin_left_10 check"></div>
+                                        {% else %}
+                                            <span class="{{item.title}} completed" id="{{item.id}}">{{item.title}}</span>
+                                            <div class="fl-r margin_left_10 check disabled"></div>
+                                        {% endif %}
+                                    </div>
+                                </li>
                             {% endfor %}
-    					{% endfor %}
-    				</ul>
-                    
+                        </ul>
+					{% endfor %}
         		{% else %}
     				<p>No items are available.</p>
         		{% endif %}
-        		<a href="" class="new_item_toggle">Add new item</a>
+            </div>
+            <div class="span4">
+        		<h4>Add new item</h4>
         		<form class="new_item_form" method="post" action=".">
                     {% csrf_token %}
                     {% for field in new_item_form %}
@@ -42,17 +49,34 @@
                     <input type="submit" value="Submit"/>
         		</form>
             </div>
+            <a href="/users/sign_out">Logout</a>
     </div>
 
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
     <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
     <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 	<script type="text/javascript">
-        	$(".new_item_toggle").click(function(e) {
-                	e.preventDefault()
-                	$(".new_item_form").slideDown()
-        	});
-            $( "#id_due" ).datepicker();
+            $( "#id_date" ).datepicker();
+
+            $(".check").click( function(){
+                $(this).addClass("disabled");
+                item = $(this).prev();
+                item_title = item.attr('class');
+                item_id = item.attr('id');
+                item.addClass("completed");
+                csrf = $('input[name=csrfmiddlewaretoken]').val();
+                $.ajax({
+                    type: "POST",
+                    url: "item_mark/",
+                    data: { 'item_title' : item_title, 'item_id': item_id, 'csrfmiddlewaretoken' : csrf }
+                });
+            });
+            $(function() {
+                $( ".sortable" ).sortable();
+                $( ".sortable" ).disableSelection();
+            });
 	</script>
 </body>
 </html>
