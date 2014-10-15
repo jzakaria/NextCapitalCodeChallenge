@@ -46,7 +46,7 @@ def archives(request, user_id):
 
 def sort_items_by_date(usr_id):
 	dt = dict()
-	archives = dict()
+	archive = dict()
 	unique_dates = []
 	item_list = Item.objects.filter(user_id=usr_id)
 	
@@ -57,17 +57,18 @@ def sort_items_by_date(usr_id):
 	for date in unique_dates:
 		dt[date] = Item.objects.filter(date=date)
 		if is_day_complete(dt[date]):
-			archives[date] = dt[date]
+			archive[date] = dt[date]
 			dt.pop(date, None)
 	
 	dt = collections.OrderedDict(sorted(dt.items()))
-	return (dt, archives)
+	return (dt, archive)
 
 def item_mark(request):
 	if request.method == "POST":
 		item_id = request.POST['item_id']
 		Item.objects.filter(id=item_id).update(completed=True)
-		
+		import ipdb; ipdb.set_trace()
+
 		url = "/users/%d/todos" % request.user.id
     	return HttpResponseRedirect(url)
 

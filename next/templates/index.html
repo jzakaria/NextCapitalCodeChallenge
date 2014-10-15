@@ -75,7 +75,7 @@
                 csrf = $('input[name=csrfmiddlewaretoken]').val();
                 $.ajax({
                     type: "POST",
-                    url: "item_mark/",
+                    url: "/users/item_mark/",
                     data: { 'item_title' : item_title, 'item_id': item_id, 'csrfmiddlewaretoken' : csrf }
                 });
             });
