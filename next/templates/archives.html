@@ -20,19 +20,15 @@
                         <h3>{{key}}</h3>
                         {% for item in value %}
                             <div class="todo-item">
-                                {% if not item.completed %}
-                                    <span class="{{item.title}}" id="{{item.id}}">{{item.title}}</span>
-                                {% else %}
-                                    <span class="{{item.title}} completed" id="{{item.id}}">{{item.title}}</span>
-                                {% endif %}
+                                <span class="{{item.title}}" id="{{item.id}}">{{item.title}}</span>
                             </div><br/>
                         {% endfor %}
 					{% endfor %}
-				</ul>
-                
+				</ul>                
     		{% else %}
 				<p>No items are available.</p>
     		{% endif %}
+            <a class="submit_btn" href="../todos">Back to Todo list</a>    
         </div>
     </div>
 

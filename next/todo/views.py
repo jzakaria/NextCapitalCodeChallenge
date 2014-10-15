@@ -11,28 +11,6 @@ import collections
 import logging
 
 @login_required
-def index(request):
-	if request.method == "POST":
-		new_item = ItemForm(request.POST)
-		if new_item.is_valid():
-			data = new_item.cleaned_data
-			item = Item()
-			item.title = data['title']
-			item.date = data['date']
-			item.user_id = request.user.id
-			item.save();
-			return HttpResponseRedirect('/todo')
-		else:
-			return HttpResponseRedirect(new_item.errors)
-	else:
-		try:
-			item_list = sort_items_by_date(request.user.id)[0]
-		except Item.DoesNotExist:
-			raise Http404
-		return render(request, 'index.html', {'item_list':item_list, 'new_item_form':ItemForm()})
-
-
-@login_required
 def todos(request, user_id):
 	#this should never happen, but if it does, sign out the 
 	# user immediately
@@ -137,6 +115,11 @@ def register(request):
 			# Update our variable to tell the template registration was successful.
 			registered = True
 
+			user = authenticate(username=user_data['email'], password=user_data['password1'])
+			login(request, user)
+
+			return HttpResponseRedirect("/users/sign_in/")
+
         # Print problems to the terminal. They'll also be shown to the user.
         else:
             error = user_form.errors
@@ -186,11 +169,7 @@ def user_login(request):
             print "Invalid login details: {0}, {1}".format(email, password)
             error = "Invalid login details supplied."
 
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
     else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
         if request.user.is_authenticated():
 			url = "/users/%d/todos" % request.user.id 
 			return HttpResponseRedirect(url)

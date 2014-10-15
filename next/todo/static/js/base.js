@@ -25,7 +25,7 @@ $(document).ready(function() {
 			           ? window.pageYOffset
 			           : document.documentElement.scrollTop;
 
-			if (offset > 50) $(".navbar-float").fadeIn(300);
+			if (offset > 40) $(".navbar-float").fadeIn(300);
 			else $(".navbar-float").fadeOut(300);
 		}
 	}

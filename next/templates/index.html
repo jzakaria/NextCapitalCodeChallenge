@@ -47,8 +47,10 @@
                         </div>
                     {% endfor %}
                     <br/>
-                    <input type="submit" value="Submit"/>
+                    <a class="submit_btn" href="">Add item</a>
         		</form>
+                <br/>
+                <a class="submit_btn" href="../archives">View archives</a>
             </div>
     </div>
 
@@ -60,6 +62,10 @@
 	<script type="text/javascript">
             $( "#id_date" ).datepicker();
 
+            $(".new_item_form .submit_btn").click( function(e){
+                e.preventDefault();
+                $(".new_item_form").submit();
+            });
             $(".check").click( function(){
                 $(this).addClass("disabled");
                 item = $(this).prev();
