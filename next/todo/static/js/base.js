@@ -38,7 +38,7 @@ $(document).ready(function() {
 	var source = header_template;
 	//Compile that bitch
 	header_template = Handlebars.compile(source);
-	$(".header").html(header_template({navlinks : links}));
+	$(".header").html(header_template({}));
 
 
 	$(".navbar-float").html($("#navItems").html());
