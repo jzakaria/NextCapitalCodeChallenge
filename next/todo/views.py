@@ -106,6 +106,8 @@ def is_day_complete(item_list):
 
 def register(request):
     context = RequestContext(request)
+    login_form = UserForm()
+    error = ""
 
     if request.user.is_authenticated():
     	url = "%d/todos" % request.user.id
@@ -137,7 +139,7 @@ def register(request):
 
         # Print problems to the terminal. They'll also be shown to the user.
         else:
-            print user_form.errors
+            error = user_form.errors
 
     # Not a HTTP POST, so we render our form.
     # This form will be blank, ready for user input.
@@ -145,13 +147,14 @@ def register(request):
         user_form = NewUserForm()
 
     # Render the template depending on the context.
-    return render(request, 'register.html', {'user_form': user_form, 'registered': registered})
-
+    return render(request, 'register.html', {'user_form': user_form, 'login_form':login_form,'registered': registered, "login_errors":error, "signup_errors":""})
 
 
 def user_login(request):
     # Like before, obtain the context for the user's request.
     context = RequestContext(request)
+    user_form = NewUserForm()
+    error = ""
 
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
@@ -177,11 +180,11 @@ def user_login(request):
 				return HttpResponseRedirect(url)
             else:
                 # An inactive account was used - no logging in!
-                return HttpResponse("Your account is disabled. Please contact jzakaria@uchicago.edu to get it reactivated.")
+                error = "Your account is disabled. Please contact jzakaria@uchicago.edu to get it reactivated."
         else:
             # Bad login details were provided. So we can't log the user in.
             print "Invalid login details: {0}, {1}".format(email, password)
-            return HttpResponse("Invalid login details supplied.")
+            error = "Invalid login details supplied."
 
     # The request is not a HTTP POST, so display the login form.
     # This scenario would most likely be a HTTP GET.
@@ -192,7 +195,7 @@ def user_login(request):
 			url = "/users/%d/todos" % request.user.id 
 			return HttpResponseRedirect(url)
 
-        return render(request, 'login.html', {'login_form': UserForm})
+    return render(request, 'register.html', {'login_form': UserForm, 'user_form':user_form, "login_errors":error, "signup_errors":""})
 
 @login_required
 def user_logout(request):

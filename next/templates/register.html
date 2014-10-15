@@ -10,9 +10,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 </head>
 <body>
-    <div class="row-fluid padding-top-bottom">
-            <div class="span4 offset1">
-        		<h4>Sign up</h4>
+    <div class="container">
+        <div class="row-fluid padding-top-bottom vertical-center-row text-center">
+            <h2>Basic Todo List App</h2>
+            <h4>By Jawwad Zakaria</h4>
+            <div class="span3 offset3 gray-box text-center">
+        		<h3>Sign up</h3>
+                <span class="text-red">{{signup_errors}}</span>
         		<form class="loginform" method="post" action=".">
                     {% csrf_token %}
                     {% for field in user_form %}
@@ -25,9 +29,24 @@
                     <input type="submit" value="Submit"/>
         		</form>
             </div>
+            <div class="span3 gray-box text-center">
+                <h3>Login</h3>
+                <span class="text-red">{{login_errors}}</span>
+                <form class="loginform" method="post" action="/users/sign_in/">
+                    {% csrf_token %}
+                    {% for field in login_form %}
+                        <div class="fieldWrapper">
+                            {{ field.errors }}
+                            {{ field.label_tag }} {{ field }}
+                        </div>
+                    {% endfor %}
+                    <br/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 </head>
 <body>
+    <div class="header"></div>
     <div class="row-fluid padding-top-bottom">
             <div class="span7 offset1">
         		{% if item_list %}
@@ -49,14 +50,13 @@
                     <input type="submit" value="Submit"/>
         		</form>
             </div>
-            <a href="/users/sign_out">Logout</a>
     </div>
 
+    <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+    <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
-    <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 	<script type="text/javascript">
             $( "#id_date" ).datepicker();
 
