@@ -45,33 +45,32 @@ def archives(request, user_id):
 	return render(request, 'archives.html', {'item_list':archives })
 
 def sort_items_by_date(usr_id):
-	dt = dict()
-	archive = dict()
-	unique_dates = []
-	item_list = Item.objects.filter(user_id=usr_id)
-	
-	for item in item_list:
-		unique_dates.append(item.date)
-	unique_dates = set(unique_dates)
-	
-	for date in unique_dates:
-		dt[date] = Item.objects.filter(date=date)
-		if is_day_complete(dt[date]):
-			archive[date] = dt[date]
-			dt.pop(date, None)
-	
-	dt = collections.OrderedDict(sorted(dt.items()))
-	return (dt, archive)
+    dt = dict()
+    archive = dict()
+    unique_dates = []
+    item_list = Item.objects.filter(user_id=usr_id)
+
+    for item in item_list:
+            unique_dates.append(item.date)
+    unique_dates = set(unique_dates)
+
+    for date in unique_dates:
+            dt[date] = Item.objects.filter(date=date,user_id=usr_id)
+            if is_day_complete(dt[date]):
+                    archive[date] = dt[date]
+                    dt.pop(date, None)
+
+    dt = collections.OrderedDict(sorted(dt.items()))
+    return (dt, archive)
+
 
 def item_mark(request):
-	if request.method == "POST":
-		item_id = request.POST['item_id']
-		Item.objects.filter(id=item_id).update(completed=True)
-		import ipdb; ipdb.set_trace()
+    if request.method == "POST":
+        item_id = request.POST['item_id']
+        Item.objects.filter(id=item_id).update(completed=True)
 
-		url = "/users/%d/todos" % request.user.id
-    	return HttpResponseRedirect(url)
-
+        url = "/users/%d/todos" % request.user.id
+        return HttpResponseRedirect(url)
 
 def is_day_complete(item_list):
 	ct = 0;
